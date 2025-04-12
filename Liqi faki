@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ghép Ảnh Rank Liên Quân</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: url('https://i.imgur.com/7vDMy8K.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      text-align: center;
+    }
+    .container {
+      margin-top: 60px;
+    }
+    input, select, button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    #result {
+      margin-top: 20px;
+    }
+    #canvas {
+      border: 2px solid white;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Ghép Ảnh Rank Liên Quân</h1>
+    <input type="text" id="username" placeholder="Nhập tên game của bạn" />
+    <select id="rank">
+      <option value="bronze">Đồng</option>
+      <option value="silver">Bạc</option>
+      <option value="gold">Vàng</option>
+      <option value="platinum">Bạch Kim</option>
+      <option value="diamond">Kim Cương</option>
+      <option value="master">Cao Thủ</option>
+      <option value="challenger">Thách Đấu</option>
+    </select>
+    <button onclick="generate()">Tạo Ảnh</button>
+
+    <div id="result">
+      <canvas id="canvas" width="500" height="300"></canvas><br/>
+      <button onclick="download()">Tải ảnh</button>
+    </div>
+  </div>
+
+  <script>
+    const rankImages = {
+      bronze: "https://i.imgur.com/kZpOJH9.png",
+      silver: "https://i.imgur.com/EI7TUBZ.png",
+      gold: "https://i.imgur.com/9Zx0bD0.png",
+      platinum: "https://i.imgur.com/BkpZ8yX.png",
+      diamond: "https://i.imgur.com/azLzC1u.png",
+      master: "https://i.imgur.com/kpx5LhG.png",
+      challenger: "https://i.imgur.com/lWYwXo4.png"
+    };
+
+    function generate() {
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      const username = document.getElementById("username").value;
+      const rank = document.getElementById("rank").value;
+
+      // Load background
+      const bg = new Image();
+      bg.src = "https://i.imgur.com/CnPfgR2.jpg"; // ảnh nền Liên Quân
+      bg.onload = () => {
+        ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+
+        // Load rank icon
+        const rankImg = new Image();
+        rankImg.src = rankImages[rank];
+        rankImg.onload = () => {
+          ctx.drawImage(rankImg, 20, 20, 100, 100);
+
+          // Thêm tên người chơi
+          ctx.font = "24px Arial";
+          ctx.fillStyle = "white";
+          ctx.fillText(username || "Tên người chơi", 140, 80);
+        };
+      };
+    }
+
+    function download() {
+      const canvas = document.getElementById("canvas");
+      const link = document.createElement("a");
+      link.download = "rank-lien-quan.png";
+      link.href = canvas.toDataURL();
+      link.click();
+    }
+  </script>
+</body>
+</html>
